@@ -105,7 +105,6 @@ radius = 5.0
 collision_layer = 3
 collision_mask = 3
 input_pickable = true
-mass = 1.1
 physics_material_override = SubResource("PhysicsMaterial_vtaks")
 script = ExtResource("1_li4g6")
 
