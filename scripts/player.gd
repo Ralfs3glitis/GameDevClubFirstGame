@@ -2,14 +2,16 @@ extends CharacterBody2D
 
 
 @export var SPEED := 130.0
+
 const JUMP_VELOCITY = -300.0
-
-
 # Get the gravity from the project settings to be synced with RigidBody nodes.
 var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
 
 @onready var animated_sprite = $AnimatedSprite2D
 
+@onready var player: CharacterBody2D = $"."
+var in_range_coin_array : Array[PhysicsCoin]
+var picked_up_coin_array : Array[PhysicsCoin]
 
 var can_doublejump : bool = true
 func jump():
@@ -19,6 +21,10 @@ func double_jump():
 	can_doublejump = false
 	
 func _physics_process(delta):
+	# Pick up all coins in in_range array
+	if Input.is_action_just_pressed("Interact"):
+		pick_up_coins()
+		
 	# Add the gravity.
 	if not is_on_floor():
 		velocity.y += gravity * delta
@@ -55,3 +61,30 @@ func _physics_process(delta):
 		velocity.x = move_toward(velocity.x, 0, SPEED)
 
 	move_and_slide()
+
+func pick_up_coins() -> void:
+	for coin in in_range_coin_array.duplicate():
+		coin.picked_up(player)
+		picked_up_coin_array.append(coin)
+	in_range_coin_array.clear()
+		
+	for coin in in_range_coin_array:
+		coin.picked_up(player)
+		picked_up_coin_array.append(coin)
+		in_range_coin_array.erase(coin)
+
+func _on_pickup_detection_zone_body_entered(body: Node2D) -> void:
+	if body is PhysicsCoin and !picked_up_coin_array.has(body):
+		coin_in_range(body)
+		
+func coin_in_range(coin : PhysicsCoin) -> void:
+	in_range_coin_array.append(coin)
+	coin.show_pickup_prompt()
+
+func _on_pickup_detection_zone_body_exited(body: Node2D) -> void:
+	if body is PhysicsCoin and !picked_up_coin_array.has(body):
+		coin_out_of_range(body)
+		
+func coin_out_of_range(coin : PhysicsCoin) -> void:
+	in_range_coin_array.erase(coin)
+	coin.hide_pickup_prompt()

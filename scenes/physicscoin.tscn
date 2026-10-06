@@ -2,9 +2,10 @@
 
 [ext_resource type="Script" uid="uid://b4o8h42vteh52" path="res://scripts/physicscoin.gd" id="1_li4g6"]
 [ext_resource type="Texture2D" uid="uid://bped01tsjeycn" path="res://assets/sprites/coin.png" id="2_4vovd"]
+[ext_resource type="FontFile" uid="uid://dbjl1e6kdxpl6" path="res://assets/fonts/PixelOperator8.ttf" id="3_5wjei"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_vtaks"]
-bounce = 1.0
+bounce = 0.8
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_1fm7y"]
 atlas = ExtResource("2_4vovd")
@@ -101,8 +102,8 @@ animations = [{
 [sub_resource type="CircleShape2D" id="CircleShape2D_li4g6"]
 radius = 5.0
 
-[node name="physicscoin" type="RigidBody2D" unique_id=14640352 groups=["coins"]]
-collision_layer = 3
+[node name="physicscoin" type="RigidBody2D" unique_id=14640352]
+collision_layer = 2
 collision_mask = 3
 input_pickable = true
 physics_material_override = SubResource("PhysicsMaterial_vtaks")
@@ -114,5 +115,23 @@ autoplay = "default"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1457188775]
 shape = SubResource("CircleShape2D_li4g6")
+
+[node name="PickUpPrompt" type="Label" parent="." unique_id=523555471]
+visible = false
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -48.0
+offset_top = -18.0
+offset_right = 48.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_colors/font_color = Color(1, 0.9490196, 0.105882354, 1)
+theme_override_fonts/font = ExtResource("3_5wjei")
+theme_override_font_sizes/font_size = 8
+text = "E to pick up"
+horizontal_alignment = 1
 
 [connection signal="input_event" from="." to="." method="_on_input_event"]
